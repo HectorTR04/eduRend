@@ -1,4 +1,3 @@
-
 #include "Scene.h"
 #include "QuadModel.h"
 #include "OBJModel.h"
