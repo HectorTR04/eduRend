@@ -42,16 +42,16 @@ void Cube::Init()
 #pragma endregion
 #pragma region Left Vertices
 	cube_vertices[4].Position = {0.5f, 0.5f, 0.0f};
-	cube_vertices[4].Normal = {1, 0, 0};
+	cube_vertices[4].Normal = {-1, 0, 0};
 	cube_vertices[4].TexCoord = {0, 0};
 	cube_vertices[5].Position = {0.5f, -0.5f, 0.0f};
-	cube_vertices[5].Normal = {1, 0, 0};
+	cube_vertices[5].Normal = {-1, 0, 0};
 	cube_vertices[5].TexCoord = {0, 1};
 	cube_vertices[6].Position = {0.5f, -0.5f, -1.0f};
-	cube_vertices[6].Normal = {1, 0, 0};
+	cube_vertices[6].Normal = {-1, 0, 0};
 	cube_vertices[6].TexCoord = {1, 1};
 	cube_vertices[7].Position = {0.5f, 0.5f, -1.0f};
-	cube_vertices[7].Normal = {1, 0, 0};
+	cube_vertices[7].Normal = {-1, 0, 0};
 	cube_vertices[7].TexCoord = {1, 0};
 #pragma endregion
 #pragma region Right Vertices
@@ -70,16 +70,16 @@ void Cube::Init()
 #pragma endregion
 #pragma region Back Vertices
 	cube_vertices[12].Position = {0.5f, 0.5f, -1.0f};
-	cube_vertices[12].Normal = {0, 0, 1};
+	cube_vertices[12].Normal = {0, 0, -1};
 	cube_vertices[12].TexCoord = {0, 0};
 	cube_vertices[13].Position = {0.5f, -0.5f, -1.0f};
-	cube_vertices[13].Normal = {0, 0, 1};
+	cube_vertices[13].Normal = {0, 0, -1};
 	cube_vertices[13].TexCoord = {0, 1};
 	cube_vertices[14].Position = {-0.5f, -0.5f, -1.0f};
-	cube_vertices[14].Normal = {0, 0, 1};
+	cube_vertices[14].Normal = {0, 0, -1};
 	cube_vertices[14].TexCoord = {1, 1};
 	cube_vertices[15].Position = {-0.5f, 0.5f, -1.0f};
-	cube_vertices[15].Normal = {0, 0, 1};
+	cube_vertices[15].Normal = {0, 0, -1};
 	cube_vertices[15].TexCoord = {1, 0};
 #pragma endregion
 #pragma region Top Vertices
@@ -98,16 +98,16 @@ void Cube::Init()
 #pragma endregion
 #pragma region Bottom Vertices
 	cube_vertices[20].Position = {-0.5f, -0.5f, -1.0f};
-	cube_vertices[20].Normal = {0, 1, 0};
+	cube_vertices[20].Normal = {0, -1, 0};
 	cube_vertices[20].TexCoord = {0, 0};
 	cube_vertices[21].Position = {0.5f, -0.5f, -1.0f};
-	cube_vertices[21].Normal = {0, 1, 0};
+	cube_vertices[21].Normal = {0, -1, 0};
 	cube_vertices[21].TexCoord = {0, 1};
 	cube_vertices[22].Position = {0.5f, -0.5f, 0.0f};
-	cube_vertices[22].Normal = {0, 1, 0};
+	cube_vertices[22].Normal = {0, -1, 0};
 	cube_vertices[22].TexCoord = {1, 1};
 	cube_vertices[23].Position = {-0.5f, -0.5f, 0.0f};
-	cube_vertices[23].Normal = {0, 1, 0};
+	cube_vertices[23].Normal = {0, -1, 0};
 	cube_vertices[23].TexCoord = {1, 0};
 #pragma endregion
 
