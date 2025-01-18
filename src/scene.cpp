@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "QuadModel.h"
 #include "OBJModel.h"
+#include "cube.h"
 
 Scene::Scene(
 	ID3D11Device* dxdevice,
@@ -47,8 +48,10 @@ void OurTestScene::Init()
 	m_camera->MoveTo({ 0, 0, 5 });
 
 	// Create objects
-	m_quad = new QuadModel(m_dxdevice, m_dxdevice_context);
-	m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
+	//m_quad = new QuadModel(m_dxdevice, m_dxdevice_context);
+	//m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
+	m_cube = new Cube(m_dxdevice, m_dxdevice_context);
+
 }
 
 //
@@ -77,7 +80,7 @@ void OurTestScene::Update(
 
 	// Quad model-to-world transformation
 	m_quad_transform = mat4f::translation(0, 0, 0) *			// No translation
-		mat4f::rotation(-m_angle, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
+		mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
 		mat4f::scaling(1.5, 1.5, 1.5);				// Scale uniformly to 150%
 
 	// Sponza model-to-world transformation
@@ -85,8 +88,14 @@ void OurTestScene::Update(
 		mat4f::rotation(fPI / 2, 0.0f, 1.0f, 0.0f) * // Rotate pi/2 radians (90 degrees) around y
 		mat4f::scaling(0.05f);						 // The scene is quite large so scale it down to 5%
 
+	m_cube_transform = mat4f::translation(0, 0, 0) *
+		mat4f::rotation(-m_angle_x, 1.0f, 0.0f, 0.0f) * // Rotate around X-axis
+		mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) * // Rotate around Y-axis
+		mat4f::scaling(1.5, 1.5, 1.5);
+
 	// Increment the rotation angle.
-	m_angle += m_angular_velocity * dt;
+	m_angle_x += m_angular_velocity * dt;
+	m_angle_y += m_angular_velocity * dt;
 
 	// Print fps
 	m_fps_cooldown -= dt;
@@ -112,11 +121,15 @@ void OurTestScene::Render()
 
 	// Load matrices + the Quad's transformation to the device and render it
 	UpdateTransformationBuffer(m_quad_transform, m_view_matrix, m_projection_matrix);
-	m_quad->Render();
+	//m_quad->Render();
 
 	// Load matrices + Sponza's transformation to the device and render it
 	UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
-	m_sponza->Render();
+	//m_sponza->Render();
+
+	UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
+	m_cube->Render();
+	
 }
 
 void OurTestScene::Release()
@@ -124,6 +137,7 @@ void OurTestScene::Release()
 	SAFE_DELETE(m_quad);
 	SAFE_DELETE(m_sponza);
 	SAFE_DELETE(m_camera);
+	SAFE_DELETE(m_cube);
 
 	SAFE_RELEASE(m_transformation_buffer);
 	// + release other CBuffers

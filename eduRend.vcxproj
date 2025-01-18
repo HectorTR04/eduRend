@@ -78,9 +78,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\hecto\source\repos\eduRend;C:\Users\hecto\source\repos\eduRend\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\hecto\source\repos\eduRend;C:\Users\hecto\source\repos\eduRend\src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -157,6 +159,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="cube.h" />
     <ClInclude Include="lib\stb_image.h" />
     <ClInclude Include="src\buffers.h" />
     <ClInclude Include="src\objmodel.h" />
@@ -177,6 +180,7 @@
     <ClInclude Include="src\window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="cube.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\inputhandler.cpp" />
     <ClCompile Include="src\main.cpp" />

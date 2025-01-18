@@ -76,6 +76,9 @@
     <ClInclude Include="lib\stb_image.h">
       <Filter>Libraries</Filter>
     </ClInclude>
+    <ClInclude Include="cube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\inputhandler.cpp">
@@ -112,6 +115,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\quadmodel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
