@@ -50,8 +50,10 @@ void OurTestScene::Init()
 	// Create objects
 	//m_quad = new QuadModel(m_dxdevice, m_dxdevice_context);
 	//m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
+	m_homestead = new OBJModel("assets/lars-homestead/larshomestead.obj", m_dxdevice, m_dxdevice_context);
 	m_cube = new Cube(m_dxdevice, m_dxdevice_context);
-
+	m_cube2 = new Cube(m_dxdevice, m_dxdevice_context);
+	m_cube3 = new Cube(m_dxdevice, m_dxdevice_context);
 }
 
 //
@@ -84,6 +86,7 @@ void OurTestScene::Update(
 	// If no transformation is desired, an identity matrix can be obtained 
 	// via e.g. Mquad = linalg::mat4f_identity; 
 
+#pragma region Default Object Transforms
 	// Quad model-to-world transformation
 	m_quad_transform = mat4f::translation(0, 0, 0) *			// No translation
 		mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) *	// Rotate continuously around the y-axis
@@ -93,11 +96,16 @@ void OurTestScene::Update(
 	m_sponza_transform = mat4f::translation(0, -5, 0) *		 // Move down 5 units
 		mat4f::rotation(fPI / 2, 0.0f, 1.0f, 0.0f) * // Rotate pi/2 radians (90 degrees) around y
 		mat4f::scaling(0.05f);						 // The scene is quite large so scale it down to 5%
+#pragma endregion
 
 	m_cube_transform = mat4f::translation(0, 0, 0) *
 		mat4f::rotation(-m_angle_x, 1.0f, 0.0f, 0.0f) * // Rotate around X-axis
 		mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) * // Rotate around Y-axis
-		mat4f::scaling(1.5, 1.5, 1.5);
+		mat4f::scaling(0.5, 0.5, 0.5);
+
+	m_homestead_transform = mat4f::translation(0, -5, 0) *
+		mat4f::rotation(0, 0.0f, 0.0f, 0.0f) * 
+		mat4f::scaling(0.1);
 
 	// Increment the rotation angle.
 	m_angle_x += m_angular_velocity * dt;
@@ -130,11 +138,16 @@ void OurTestScene::Render()
 	//m_quad->Render();
 
 	// Load matrices + Sponza's transformation to the device and render it
-	UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
+	//UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
 	//m_sponza->Render();
 
-	UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
-	m_cube->Render();
+	/*UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
+	m_cube->Render();*/
+
+	UpdateTransformationBuffer(m_homestead_transform, m_view_matrix, m_projection_matrix);
+	m_homestead->Render();
+
+
 	
 }
 
