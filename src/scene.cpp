@@ -52,8 +52,8 @@ void OurTestScene::Init()
 	//m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
 	m_homestead = new OBJModel("assets/lars-homestead/larshomestead.obj", m_dxdevice, m_dxdevice_context);
 	m_cube = new Cube(m_dxdevice, m_dxdevice_context);
-	m_cube2 = new Cube(m_dxdevice, m_dxdevice_context);
-	m_cube3 = new Cube(m_dxdevice, m_dxdevice_context);
+	m_sphere = new OBJModel("assets/sphere/sphere.obj", m_dxdevice, m_dxdevice_context);
+	m_sphere2 = new OBJModel("assets/sphere/sphere.obj", m_dxdevice, m_dxdevice_context);
 }
 
 //
@@ -103,9 +103,15 @@ void OurTestScene::Update(
 		mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) * // Rotate around Y-axis
 		mat4f::scaling(0.5, 0.5, 0.5);
 
-	m_homestead_transform = mat4f::translation(0, -5, 0) *
-		mat4f::rotation(0, 0.0f, 0.0f, 0.0f) * 
+	m_homestead_transform = mat4f::translation(0, -5, -5) *
 		mat4f::scaling(0.1);
+
+	m_sphere_transform = m_homestead_transform * mat4f::translation(0, 60, 0) *
+		mat4f::rotation(-m_angle_x, 1.0f, 0.0f, 0.0f) *
+		mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) *
+		mat4f::scaling(5);
+
+	m_sphere2_transform = m_sphere_transform * mat4f::translation(10, 0, 0);
 
 	// Increment the rotation angle.
 	m_angle_x += m_angular_velocity * dt;
@@ -147,8 +153,12 @@ void OurTestScene::Render()
 	UpdateTransformationBuffer(m_homestead_transform, m_view_matrix, m_projection_matrix);
 	m_homestead->Render();
 
+	UpdateTransformationBuffer(m_sphere_transform, m_view_matrix, m_projection_matrix);
+	m_sphere->Render();
 
-	
+	UpdateTransformationBuffer(m_sphere2_transform, m_view_matrix, m_projection_matrix);
+	m_sphere2->Render();
+
 }
 
 void OurTestScene::Release()

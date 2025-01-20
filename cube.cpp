@@ -5,7 +5,6 @@ Cube::Cube(ID3D11Device *dxdevice, ID3D11DeviceContext *dxdevice_context)
 {
 	Init();
 	CreateCubeBuffers(dxdevice);
-
 }
 
 void Cube::Init()
@@ -159,6 +158,8 @@ void Cube::Render() const
 {
 	const UINT32 stride = sizeof(Vertex); //  sizeof(float) * 8;
 	const UINT32 offset = 0;
+
+	//Bind our vertex buffer
 	m_dxdevice_context->IASetVertexBuffers(0, 1, &m_vertex_buffer, &stride, &offset);
 
 	// Bind our index buffer
