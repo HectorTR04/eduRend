@@ -10,6 +10,8 @@
 #include "vec\vec.h"
 #include "vec\mat.h"
 
+using namespace linalg;
+
 /**
  * @brief Manages camera data, also handles generation of view and projection matrices.
 */
@@ -38,6 +40,8 @@ public:
 	*/
 	void Move(const linalg::vec3f& direction) noexcept;
 
+	void MoveForward(const linalg::vec3f &direction) noexcept;
+
 	void Rotate(const float &roll, const float &yaw, const float &pitch) noexcept;
 
 	/**
@@ -51,6 +55,8 @@ public:
 	 * @return World-to-View matrix.
 	*/
 	linalg::mat4f WorldToViewMatrix() const noexcept;
+
+	linalg::mat4f ViewToWorldMatrix() noexcept;
 
 	/**
 	 * @brief get the Matrix transforming from View space to Clip space
@@ -82,5 +88,4 @@ private:
 	linalg::mat4f rotation_matrix;
 	
 };
-
 #endif

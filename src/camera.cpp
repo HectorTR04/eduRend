@@ -1,7 +1,5 @@
 #include "Camera.h"
 
-using namespace linalg;
-
 void Camera::MoveTo(const vec3f& position) noexcept
 {
 	m_position = position;
@@ -10,6 +8,16 @@ void Camera::MoveTo(const vec3f& position) noexcept
 void Camera::Move(const vec3f& direction) noexcept
 {
 	m_position += direction;
+}
+
+void Camera::MoveForward(const vec3f &direction) noexcept
+{
+	vec4f move_direction = {direction.x, direction.y, direction.z, 0};
+
+	vec4f view_movement = ViewToWorldMatrix() * move_direction;
+	m_position.x += view_movement.x;
+	m_position.y += view_movement.y;
+	m_position.z += view_movement.z;
 }
 
 void Camera::Rotate(const float &roll, const float &yaw, const float &pitch) noexcept
@@ -30,6 +38,11 @@ mat4f Camera::WorldToViewMatrix() const noexcept
 	// Since now there is no rotation, this matrix is simply T(-p)
 
 	return transpose(rotation_matrix) * mat4f::translation(-m_position);
+}
+
+linalg::mat4f Camera::ViewToWorldMatrix() noexcept
+{
+	return mat4f::translation(m_position) * rotation_matrix;
 }
 
 mat4f Camera::ProjectionMatrix() const noexcept

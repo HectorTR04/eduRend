@@ -65,14 +65,23 @@ void OurTestScene::Update(
 	const InputHandler& input_handler)
 {
 	// Basic camera control
-	if (input_handler.IsKeyPressed(Keys::Up) || input_handler.IsKeyPressed(Keys::W))
+	/*if (input_handler.IsKeyPressed(Keys::Up) || input_handler.IsKeyPressed(Keys::W))
 		m_camera->Move({ 0.0f, 0.0f, -m_camera_velocity * dt });
 	if (input_handler.IsKeyPressed(Keys::Down) || input_handler.IsKeyPressed(Keys::S))
 		m_camera->Move({ 0.0f, 0.0f, m_camera_velocity * dt });
 	if (input_handler.IsKeyPressed(Keys::Right) || input_handler.IsKeyPressed(Keys::D))
 		m_camera->Move({ m_camera_velocity * dt, 0.0f, 0.0f });
 	if (input_handler.IsKeyPressed(Keys::Left) || input_handler.IsKeyPressed(Keys::A))
-		m_camera->Move({ -m_camera_velocity * dt, 0.0f, 0.0f });
+		m_camera->Move({ -m_camera_velocity * dt, 0.0f, 0.0f });*/
+
+	if (input_handler.IsKeyPressed(Keys::Up) || input_handler.IsKeyPressed(Keys::W))
+		m_camera->MoveForward({0.0f, 0.0f, -m_camera_velocity * dt});
+	if (input_handler.IsKeyPressed(Keys::Down) || input_handler.IsKeyPressed(Keys::S))
+		m_camera->MoveForward({0.0f, 0.0f, m_camera_velocity * dt});
+	if (input_handler.IsKeyPressed(Keys::Right) || input_handler.IsKeyPressed(Keys::D))
+		m_camera->MoveForward({m_camera_velocity * dt, 0.0f, 0.0f});
+	if (input_handler.IsKeyPressed(Keys::Left) || input_handler.IsKeyPressed(Keys::A))
+		m_camera->MoveForward({-m_camera_velocity * dt, 0.0f, 0.0f});
 
 	//Camera Rotation
 	float mousedx = input_handler.GetMouseDeltaX();
