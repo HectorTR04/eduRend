@@ -28,6 +28,11 @@ void Camera::Rotate(const float &roll, const float &yaw, const float &pitch) noe
 	rotation_matrix = mat4f::rotation(-m_rotation.z, -m_rotation.y, -m_rotation.x);
 }
 
+linalg::vec3f Camera::GetCameraPosition()
+{
+	return m_position;
+}
+
 mat4f Camera::WorldToViewMatrix() const noexcept
 {
 	// Assuming a camera's position and rotation is defined by matrices T(p) and R,

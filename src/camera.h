@@ -44,6 +44,8 @@ public:
 
 	void Rotate(const float &roll, const float &yaw, const float &pitch) noexcept;
 
+	linalg::vec3f GetCameraPosition();
+
 	/**
 	 * @brief Changes the camera aspect ratio.
 	 * @param[in] aspect_ratio New aspect ratio, calculate with width / height
