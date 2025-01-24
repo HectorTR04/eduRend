@@ -41,6 +41,9 @@ public:
 	*/
 	OBJModel(const std::string& objfile, ID3D11Device* dxdevice, ID3D11DeviceContext* dxdevice_context);
 
+	void InitMaterialBuffer();
+	void UpdateMaterialBuffer(Material material) const;
+
 	/**
 	 * @brief Renders the model.
 	*/

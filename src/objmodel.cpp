@@ -1,4 +1,5 @@
 #include "OBJModel.h"
+#include <buffers.h>
 
 OBJModel::OBJModel(
 	const std::string& objfile,
@@ -83,7 +84,33 @@ OBJModel::OBJModel(
 	}
 	std::cout << "Done." << std::endl;
 
+	InitMaterialBuffer();
+
 	SAFE_DELETE(mesh);
+}
+
+void OBJModel::InitMaterialBuffer()
+{
+	HRESULT hr;
+	D3D11_BUFFER_DESC matrixBufferDesc = {0};
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(MaterialBuffer);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+	ASSERT(hr = m_dxdevice->CreateBuffer(&matrixBufferDesc, nullptr, &m_material_buffer));
+}
+
+void OBJModel::UpdateMaterialBuffer(Material material) const
+{
+	D3D11_MAPPED_SUBRESOURCE resource;
+	m_dxdevice_context->Map(m_material_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	MaterialBuffer *material_buffer = (MaterialBuffer*)resource.pData;
+	material_buffer->ambient = (material.AmbientColour.x, material.AmbientColour.y, material.AmbientColour.z, 1);
+	material_buffer->diffuse = (material.DiffuseColour.x, material.DiffuseColour.y, material.DiffuseColour.z, 1);
+	material_buffer->specular = (material.SpecularColour.x, material.SpecularColour.y, material.SpecularColour.z, 1);
+	m_dxdevice_context->Unmap(m_material_buffer, 0);
 }
 
 void OBJModel::Render() const
@@ -101,6 +128,8 @@ void OBJModel::Render() const
 	{
 		// Fetch material
 		const Material& material = m_materials[indexRange.MaterialIndex];
+
+		UpdateMaterialBuffer(material);
 
 		// Bind diffuse texture to slot t0 of the PS
 		m_dxdevice_context->PSSetShaderResources(0, 1, &material.DiffuseTexture.TextureView);

@@ -48,8 +48,6 @@ void OurTestScene::Init()
 	// Move camera to (0,0,5)
 	m_camera->MoveTo({ 0, 0, 5 });
 
-	m_light = (0, 10, 50);
-
 	// Create objects
 	//m_quad = new QuadModel(m_dxdevice, m_dxdevice_context);
 	//m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
@@ -90,6 +88,8 @@ void OurTestScene::Update(
 	float mousedx = input_handler.GetMouseDeltaX();
 	float mousedy = input_handler.GetMouseDeltaY();
 	m_camera->Rotate(0, mousedx, mousedy);
+
+	//m_light = {10, 10, 10,0};
 
 
 	// Now set/update object transformations
@@ -160,17 +160,19 @@ void OurTestScene::Render()
 	//UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
 	//m_sponza->Render();
 
-	UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
-	m_cube->Render();
+	/*UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
+	m_cube->Render();*/
 
 	/*UpdateTransformationBuffer(m_homestead_transform, m_view_matrix, m_projection_matrix);
 	m_homestead->Render();*/
 
-	/*UpdateTransformationBuffer(m_sphere_transform, m_view_matrix, m_projection_matrix);
+	UpdateTransformationBuffer(m_sphere_transform, m_view_matrix, m_projection_matrix);
 	m_sphere->Render();
 
-	UpdateTransformationBuffer(m_sphere2_transform, m_view_matrix, m_projection_matrix);
+	/*UpdateTransformationBuffer(m_sphere2_transform, m_view_matrix, m_projection_matrix);
 	m_sphere2->Render();*/
+
+	m_light = {-10, -10, -10, 0};
 
 	UpdateLightCamBuffer(m_light, (m_camera->GetCameraPosition(),0));
 
@@ -244,8 +246,8 @@ void OurTestScene::UpdateLightCamBuffer(vec4f light_position, vec4f camera_posit
 	D3D11_MAPPED_SUBRESOURCE resource;
 	m_dxdevice_context->Map(m_lightcam_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	LightCamBuffer *lightcam_buffer= (LightCamBuffer*)resource.pData;
-	lightcam_buffer->light_position = (m_light, 0);
-	lightcam_buffer->camera_position = (m_camera->GetCameraPosition(), 0);
+	lightcam_buffer->light_position = light_position;
+	lightcam_buffer->camera_position = camera_position;
 	m_dxdevice_context->Unmap(m_lightcam_buffer, 0);
 }
 
