@@ -40,9 +40,9 @@ float4 PS_main(PSIn input) : SV_Target
     float3 R = reflect(-L, N);
     float3 V = normalize(camera_position.xyz - input.PosWorld.xyz);
     
-    float4 lambert_diffuse = max(dot(L, N), 0);
-    float4 specular_highlight = max(pow(abs(dot(R, V)), shininess), 0);
-    
+    float4 lambert_diffuse = max(dot(N, L), 0);
+    float4 specular_highlight = max(pow(abs(dot(R, V)), /*shininess*/20), 0);
+   
     float4 ambient_component = ambient;
     float4 diffuse_component = diffuse * lambert_diffuse;
     float4 specular_component = specular * specular_highlight;

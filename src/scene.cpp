@@ -51,7 +51,7 @@ void OurTestScene::Init()
 	// Create objects
 	//m_quad = new QuadModel(m_dxdevice, m_dxdevice_context);
 	//m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
-	m_homestead = new OBJModel("assets/lars-homestead/larshomestead.obj", m_dxdevice, m_dxdevice_context);
+	m_homestead = new OBJModel("assets/lars-homestead/homestead.obj", m_dxdevice, m_dxdevice_context);
 	m_cube = new Cube(m_dxdevice, m_dxdevice_context);
 	m_sphere = new OBJModel("assets/sphere/sphere.obj", m_dxdevice, m_dxdevice_context);
 	m_sphere2 = new OBJModel("assets/sphere/sphere.obj", m_dxdevice, m_dxdevice_context);
@@ -119,8 +119,6 @@ void OurTestScene::Update(
 		mat4f::scaling(0.1);
 
 	m_sphere_transform = m_homestead_transform * mat4f::translation(0, 60, 0) *
-		mat4f::rotation(-m_angle_x, 1.0f, 0.0f, 0.0f) *
-		mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) *
 		mat4f::scaling(5);
 
 	m_sphere2_transform = m_sphere_transform * mat4f::translation(10, 0, 0);
@@ -157,14 +155,14 @@ void OurTestScene::Render()
 	//m_quad->Render();
 
 	// Load matrices + Sponza's transformation to the device and render it
-	//UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
-	//m_sponza->Render();
+	/*UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
+	m_sponza->Render();*/
 
 	/*UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
 	m_cube->Render();*/
 
-	/*UpdateTransformationBuffer(m_homestead_transform, m_view_matrix, m_projection_matrix);
-	m_homestead->Render();*/
+	UpdateTransformationBuffer(m_homestead_transform, m_view_matrix, m_projection_matrix);
+	m_homestead->Render();
 
 	UpdateTransformationBuffer(m_sphere_transform, m_view_matrix, m_projection_matrix);
 	m_sphere->Render();
@@ -172,7 +170,7 @@ void OurTestScene::Render()
 	/*UpdateTransformationBuffer(m_sphere2_transform, m_view_matrix, m_projection_matrix);
 	m_sphere2->Render();*/
 
-	m_light = {-10, -10, -10, 0};
+	m_light = {0, 20, 0, 0};
 
 	UpdateLightCamBuffer(m_light, (m_camera->GetCameraPosition(),0));
 

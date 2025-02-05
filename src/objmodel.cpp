@@ -107,9 +107,9 @@ void OBJModel::UpdateMaterialBuffer(Material material) const
 	D3D11_MAPPED_SUBRESOURCE resource;
 	m_dxdevice_context->Map(m_material_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
 	MaterialBuffer *material_buffer = (MaterialBuffer*)resource.pData;
-	material_buffer->ambient = (material.AmbientColour.x, material.AmbientColour.y, material.AmbientColour.z, 1);
-	material_buffer->diffuse = (material.DiffuseColour.x, material.DiffuseColour.y, material.DiffuseColour.z, 1);
-	material_buffer->specular = (material.SpecularColour.x, material.SpecularColour.y, material.SpecularColour.z, 1);
+	material_buffer->ambient = float4(material.AmbientColour.x, material.AmbientColour.y, material.AmbientColour.z, 1.0f);
+	material_buffer->diffuse = float4(material.DiffuseColour.x, material.DiffuseColour.y, material.DiffuseColour.z, 1.0f);
+	material_buffer->specular = float4(material.SpecularColour.x, material.SpecularColour.y, material.SpecularColour.z, 1.0f);
 	m_dxdevice_context->Unmap(m_material_buffer, 0);
 }
 
@@ -122,6 +122,9 @@ void OBJModel::Render() const
 
 	// Bind index buffer
 	m_dxdevice_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
+
+	//Bind material buffer
+	m_dxdevice_context->PSSetConstantBuffers(1, 1, &m_material_buffer);
 
 	// Iterate Drawcalls
 	for (auto& indexRange : m_index_ranges)
