@@ -25,6 +25,13 @@ void Camera::Rotate(const float &roll, const float &yaw, const float &pitch) noe
 	m_rotation.z += roll / camera_sensitivity;
 	m_rotation.y += yaw / camera_sensitivity;
 	m_rotation.x += pitch / camera_sensitivity;
+	m_rotation.x += pitch / camera_sensitivity;
+	if (m_rotation.x > fPI / 2) {
+		m_rotation.x = fPI / 2;
+	}
+	if (m_rotation.x < -(fPI / 2)) {
+		m_rotation.x = -(fPI / 2);
+	}
 	rotation_matrix = mat4f::rotation(-m_rotation.z, -m_rotation.y, -m_rotation.x);
 }
 
