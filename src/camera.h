@@ -82,7 +82,7 @@ private:
 	float m_near_plane;
 	float m_far_plane;
 
-	float camera_sensitivity = 1000.0f;
+	float camera_sensitivity = 600.0f;
 
 	linalg::vec3f m_position;
 	linalg::vec3f m_rotation;
