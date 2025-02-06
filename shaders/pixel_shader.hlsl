@@ -1,5 +1,6 @@
 
 Texture2D texDiffuse : register(t0);
+SamplerState texSampler : register(s0);
 
 cbuffer LightCamBuffer : register(b0)
 {
@@ -41,10 +42,10 @@ float4 PS_main(PSIn input) : SV_Target
     float3 V = normalize(camera_position.xyz - input.PosWorld.xyz);
     
     float4 lambert_diffuse = max(dot(N, L), 0);
-    float4 specular_highlight = max(pow(abs(dot(R, V)), /*shininess*/20), 0);
-   
+    float4 specular_highlight = max(pow(abs(dot(R, V)), /*shininess*/10), 0);
+    
     float4 ambient_component = ambient;
-    float4 diffuse_component = diffuse * lambert_diffuse;
+    float4 diffuse_component = diffuse * lambert_diffuse * texDiffuse.Sample(texSampler, input.TexCoord);
     float4 specular_component = specular * specular_highlight;
     
     float4 phong_illumination = ambient_component + diffuse_component + specular_component;
