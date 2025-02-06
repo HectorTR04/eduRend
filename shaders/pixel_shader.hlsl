@@ -45,7 +45,7 @@ float4 PS_main(PSIn input) : SV_Target
     float4 specular_highlight = max(pow(abs(dot(R, V)), /*shininess*/10), 0);
     
     float4 ambient_component = ambient;
-    float4 diffuse_component = diffuse * lambert_diffuse * texDiffuse.Sample(texSampler, input.TexCoord);
+    float4 diffuse_component = /*diffuse * lambert_diffuse **/ texDiffuse.Sample(texSampler, input.TexCoord);
     float4 specular_component = specular * specular_highlight;
     
     float4 phong_illumination = ambient_component + diffuse_component + specular_component;

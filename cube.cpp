@@ -1,4 +1,5 @@
 #include "cube.h"
+#include <buffers.h>
 
 Cube::Cube(ID3D11Device *dxdevice, ID3D11DeviceContext *dxdevice_context)
 	: Model(dxdevice, dxdevice_context)
@@ -152,6 +153,22 @@ void Cube::CreateCubeBuffers(ID3D11Device *dxdevice)
 	SETNAME(m_index_buffer, "IndexBuffer");
 
 	m_number_of_indices = (unsigned int)cube_indices.size();
+
+	std::cout << "Loading textures..." << std::endl;
+	HRESULT hr;
+
+	// Load Diffuse texture
+	//
+		hr = LoadTextureFromFile(
+			dxdevice,
+			"assets/textures/crate.png",
+			&material.DiffuseTexture);
+		std::cout << "\t" << "assets/textures/crate.png"
+			<< (SUCCEEDED(hr) ? " - OK" : "- FAILED") << std::endl;
+	std::cout << "Done." << std::endl;
+
+
+	InitMaterialBuffer();
 }
 
 void Cube::Render() const
@@ -165,6 +182,38 @@ void Cube::Render() const
 	// Bind our index buffer
 	m_dxdevice_context->IASetIndexBuffer(m_index_buffer, DXGI_FORMAT_R32_UINT, 0);
 
+	//Bind material buffer
+	m_dxdevice_context->PSSetConstantBuffers(1, 1, &m_material_buffer);
+
+	UpdateMaterialBuffer(material);
+
+	// Bind diffuse texture to slot t0 of the PS
+	m_dxdevice_context->PSSetShaderResources(0, 1, &material.DiffuseTexture.TextureView);
+
 	// Make the drawcall
 	m_dxdevice_context->DrawIndexed(m_number_of_indices, 0, 0);
+}
+
+void Cube::InitMaterialBuffer()
+{
+	HRESULT hr;
+	D3D11_BUFFER_DESC matrixBufferDesc = {0};
+	matrixBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	matrixBufferDesc.ByteWidth = sizeof(MaterialBuffer);
+	matrixBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	matrixBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	matrixBufferDesc.MiscFlags = 0;
+	matrixBufferDesc.StructureByteStride = 0;
+	ASSERT(hr = m_dxdevice->CreateBuffer(&matrixBufferDesc, nullptr, &m_material_buffer));
+}
+
+void Cube::UpdateMaterialBuffer(Material material) const
+{
+	D3D11_MAPPED_SUBRESOURCE resource;
+	m_dxdevice_context->Map(m_material_buffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &resource);
+	MaterialBuffer *material_buffer = (MaterialBuffer *)resource.pData;
+	material_buffer->ambient = float4(material.AmbientColour.x, material.AmbientColour.y, material.AmbientColour.z, 1.0f);
+	material_buffer->diffuse = float4(material.DiffuseColour.x, material.DiffuseColour.y, material.DiffuseColour.z, 1.0f);
+	material_buffer->specular = float4(material.SpecularColour.x, material.SpecularColour.y, material.SpecularColour.z, 1.0f);
+	m_dxdevice_context->Unmap(m_material_buffer, 0);
 }

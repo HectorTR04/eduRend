@@ -43,6 +43,9 @@ public:
 	Model(ID3D11Device* dxdevice, ID3D11DeviceContext* dxdevice_context) 
 		:	m_dxdevice(dxdevice), m_dxdevice_context(dxdevice_context) { }
 
+	virtual void InitMaterialBuffer() = 0;
+	virtual void UpdateMaterialBuffer(Material material) const = 0;
+
 	/**
 	 * @brief Abstract render method: must be implemented by derived classes
 	*/

@@ -11,6 +11,10 @@ public:
 	void Init();
 	void CreateCubeBuffers(ID3D11Device *dxdevice);
 
+	void InitMaterialBuffer();
+
+	void UpdateMaterialBuffer(Material material) const;
+
 	virtual void Render() const;
 
 	~Cube() {};
@@ -18,5 +22,6 @@ public:
 private:
 	std::vector<unsigned> cube_indices;
 	std::vector<Vertex> cube_vertices{24};
+	Material material;
 };
 
