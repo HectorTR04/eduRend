@@ -32,6 +32,9 @@ OurTestScene::OurTestScene(
 	InitTransformationBuffer();
 	// + init other CBuffers
 	InitLightCamBuffer();
+	
+	//Default Sampler State
+	InitSamplerState(m_linear, m_clamp);
 }
 
 //
@@ -173,7 +176,6 @@ void OurTestScene::Render()
 	m_light = {0, 20, 0, 0};
 
 	UpdateLightCamBuffer(m_light, (m_camera->GetCameraPosition(),0));
-
 }
 
 void OurTestScene::Release()
@@ -185,6 +187,7 @@ void OurTestScene::Release()
 
 	SAFE_RELEASE(m_transformation_buffer);
 	SAFE_RELEASE(m_lightcam_buffer);
+	SAFE_RELEASE(sampler);
 	// + release other CBuffers
 }
 
@@ -247,6 +250,24 @@ void OurTestScene::UpdateLightCamBuffer(vec4f light_position, vec4f camera_posit
 	lightcam_buffer->light_position = light_position;
 	lightcam_buffer->camera_position = camera_position;
 	m_dxdevice_context->Unmap(m_lightcam_buffer, 0);
+}
+
+void OurTestScene::InitSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE address)
+{
+	D3D11_SAMPLER_DESC samplerdesc =
+	{
+		filter, // Filter
+		address, // AddressU
+		address, // AddressV
+		address, // AddressW
+		0.0f, // MipLODBias
+		1, // MaxAnisotropy
+		D3D11_COMPARISON_NEVER, // ComapirsonFunc
+		{ 1.0f, 1.0f, 1.0f, 1.0f }, // BorderColor
+		-FLT_MAX, // MinLOD
+		FLT_MAX, // MaxLOD
+	};
+	m_dxdevice->CreateSamplerState(&samplerdesc, &sampler);
 }
 
 

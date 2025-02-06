@@ -81,6 +81,8 @@ class OurTestScene : public Scene
 	// + other CBuffers
 	ID3D11Buffer *m_lightcam_buffer = nullptr;
 
+	//Sampler
+	ID3D11SamplerState *sampler;
 	//
 	// Scene content
 	//
@@ -113,11 +115,23 @@ class OurTestScene : public Scene
 	float m_camera_velocity = 5.0f;	// Camera movement velocity in units/s
 	float m_fps_cooldown = 0;
 
+	//Filters
+	D3D11_FILTER m_linear = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	D3D11_FILTER m_point = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	D3D11_FILTER m_anisotropic = D3D11_FILTER_ANISOTROPIC;
+
+	//Addresses
+	D3D11_TEXTURE_ADDRESS_MODE m_wrap = D3D11_TEXTURE_ADDRESS_WRAP;
+	D3D11_TEXTURE_ADDRESS_MODE m_mirror = D3D11_TEXTURE_ADDRESS_MIRROR;
+	D3D11_TEXTURE_ADDRESS_MODE m_clamp = D3D11_TEXTURE_ADDRESS_CLAMP;
+
 	void InitTransformationBuffer();
 	void UpdateTransformationBuffer(mat4f model_to_world_matrix, mat4f world_to_view_matrix, mat4f projection_matrix);
 
 	void InitLightCamBuffer();
 	void UpdateLightCamBuffer(vec4f light_position, vec4f camera_position);
+
+	void InitSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE address);
 
 public:
 	/**

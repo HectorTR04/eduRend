@@ -17,7 +17,7 @@ public:
 
 	virtual void Render() const;
 
-	~Cube() {};
+	~Cube();
 
 private:
 	std::vector<unsigned> cube_indices;

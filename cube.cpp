@@ -217,3 +217,8 @@ void Cube::UpdateMaterialBuffer(Material material) const
 	material_buffer->specular = float4(material.SpecularColour.x, material.SpecularColour.y, material.SpecularColour.z, 1.0f);
 	m_dxdevice_context->Unmap(m_material_buffer, 0);
 }
+
+Cube::~Cube() 
+{
+	SAFE_RELEASE(material.DiffuseTexture.TextureView);
+}
