@@ -130,6 +130,16 @@ void OBJModel::ComputeTB(Vertex &v0, Vertex &v1, Vertex &v2)
 {
 	vec3f tangent, binormal;
 
+	vec3f D = v1.Position - v0.Position;
+	vec3f E = v2.Position - v0.Position;
+	vec2f F = v1.TexCoord - v0.TexCoord;
+	vec2f G = v2.TexCoord - v0.TexCoord;
+	
+	mat2f GF = {G.y, -F.y, -G.x, F.x};
+	mat3f DE = {D.x, D.y, D.z, E.x, E.y, E.z, 0, 0, 0};
+	
+	float help = 1 / ((F.x * G.y) - (F.y * G.x));
+	//mat3f TB = help * GF * DE;
 	// TODO: compute the 'tangent' and 'binormal' vectors
 	//       using Lengyel’s method, as given in lecture
 

@@ -43,15 +43,17 @@ float4 PS_main(PSIn input) : SV_Target
     float3 T = normalize(input.Tangent);
     float3 B = normalize(input.Binormal);
     float3 N = normalize(input.Normal);
+     
+    float3x3 TBN = transpose(float3x3(T, B, N));
+    
+    float4 diffuse_texture = texDiffuse.Sample(texSampler, input.TexCoord);
+    float3 normal_texture = texNormal.Sample(texSampler, input.TexCoord).xyz * 2 - 1;
+     
+    N = mul(TBN, normal_texture);
     
     float3 L = normalize(light_position.xyz - input.PosWorld.xyz);
     float3 R = reflect(-L, N);
     float3 V = normalize(camera_position.xyz - input.PosWorld.xyz);
-    
-    float3x3 TBN = transpose(float3x3(T, B, N));
-    
-    float4 diffuse_texture = texDiffuse.Sample(texSampler, input.TexCoord);
-    float4 normal_texture = texNormal.Sample(texSampler, input.TexCoord);
     
     float4 lambert_diffuse = max(dot(N, L), 0);
     float4 specular_highlight = max(pow(abs(dot(R, V)), /*shininess*/10), 0);
