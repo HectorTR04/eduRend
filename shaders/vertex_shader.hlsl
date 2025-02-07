@@ -30,7 +30,8 @@ struct PSIn
 PSIn VS_main(VSIn input)
 {
 	PSIn output = (PSIn)0;
-	
+    float texScale = 10;
+    
 	// Model->View transformation
 	matrix MV = mul(WorldToViewMatrix, ModelToWorldMatrix);
 
@@ -41,7 +42,7 @@ PSIn VS_main(VSIn input)
 	// Perform transformations and send to output
 	output.Pos = mul(MVP, float4(input.Pos, 1));
 	output.Normal = normalize( mul(ModelToWorldMatrix, float4(input.Normal,0)).xyz );
-	output.TexCoord = input.TexCoord;
+    output.TexCoord = input.TexCoord * texScale;
     output.PosWorld = mul(ModelToWorldMatrix, float4(input.Pos, 1)).xyz;
 		
 	return output;

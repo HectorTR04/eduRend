@@ -21,7 +21,13 @@ enum class Keys
 	W = DIK_W,
 	A = DIK_A,
 	S = DIK_S,
-	D = DIK_D
+	D = DIK_D,
+	NUM1 = DIK_NUMPAD1,
+	NUM2 = DIK_NUMPAD2,
+	NUM3 = DIK_NUMPAD3,
+	NUM4 = DIK_NUMPAD4,
+	NUM5 = DIK_NUMPAD5,
+	NUM6 = DIK_NUMPAD6
 };
 
 /**

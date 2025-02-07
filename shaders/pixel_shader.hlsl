@@ -50,6 +50,6 @@ float4 PS_main(PSIn input) : SV_Target
     
     float4 phong_illumination = ambient_component + diffuse_component + specular_component;
 
-    return float4(phong_illumination.xyz, 1.0);
+    return float4(diffuse_component.xyz, 1.0);
 
 }

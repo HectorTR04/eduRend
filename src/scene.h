@@ -112,7 +112,7 @@ class OurTestScene : public Scene
 	float m_angle_x = 0;			// A per-frame updated rotation angle (radians)...
 	float m_angle_y = 0;
 	float m_angular_velocity = fPI / 2;	// ...and its velocity (radians/sec)
-	float m_camera_velocity = 5.0f;	// Camera movement velocity in units/s
+	float m_camera_velocity = 1.0f;	// Camera movement velocity in units/s
 	float m_fps_cooldown = 0;
 
 	//Filters
@@ -131,7 +131,7 @@ class OurTestScene : public Scene
 	void InitLightCamBuffer();
 	void UpdateLightCamBuffer(vec4f light_position, vec4f camera_position);
 
-	void InitSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE address);
+	void SetSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE address);
 
 public:
 	/**

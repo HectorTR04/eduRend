@@ -158,12 +158,11 @@ void Cube::CreateCubeBuffers(ID3D11Device *dxdevice)
 	HRESULT hr;
 
 	// Load Diffuse texture
-	//
 		hr = LoadTextureFromFile(
 			dxdevice,
-			"assets/textures/crate.png",
+			"assets/textures/yroadcrossing.png",
 			&material.DiffuseTexture);
-		std::cout << "\t" << "assets/textures/crate.png"
+		std::cout << "\t" << "assets/textures/yroadcrossing.png"
 			<< (SUCCEEDED(hr) ? " - OK" : "- FAILED") << std::endl;
 	std::cout << "Done." << std::endl;
 

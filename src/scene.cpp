@@ -34,7 +34,7 @@ OurTestScene::OurTestScene(
 	InitLightCamBuffer();
 	
 	//Default Sampler State
-	InitSamplerState(m_linear, m_clamp);
+	SetSamplerState(m_linear, m_clamp);
 }
 
 //
@@ -69,15 +69,6 @@ void OurTestScene::Update(
 	const InputHandler& input_handler)
 {
 	// Basic camera control
-	/*if (input_handler.IsKeyPressed(Keys::Up) || input_handler.IsKeyPressed(Keys::W))
-		m_camera->Move({ 0.0f, 0.0f, -m_camera_velocity * dt });
-	if (input_handler.IsKeyPressed(Keys::Down) || input_handler.IsKeyPressed(Keys::S))
-		m_camera->Move({ 0.0f, 0.0f, m_camera_velocity * dt });
-	if (input_handler.IsKeyPressed(Keys::Right) || input_handler.IsKeyPressed(Keys::D))
-		m_camera->Move({ m_camera_velocity * dt, 0.0f, 0.0f });
-	if (input_handler.IsKeyPressed(Keys::Left) || input_handler.IsKeyPressed(Keys::A))
-		m_camera->Move({ -m_camera_velocity * dt, 0.0f, 0.0f });*/
-
 	if (input_handler.IsKeyPressed(Keys::Up) || input_handler.IsKeyPressed(Keys::W))
 		m_camera->MoveForward({0.0f, 0.0f, -m_camera_velocity * dt});
 	if (input_handler.IsKeyPressed(Keys::Down) || input_handler.IsKeyPressed(Keys::S))
@@ -91,9 +82,6 @@ void OurTestScene::Update(
 	float mousedx = input_handler.GetMouseDeltaX();
 	float mousedy = input_handler.GetMouseDeltaY();
 	m_camera->Rotate(0, mousedx, mousedy);
-
-	//m_light = {10, 10, 10,0};
-
 
 	// Now set/update object transformations
 	// This can be done using any sequence of transformation matrices,
@@ -114,8 +102,8 @@ void OurTestScene::Update(
 #pragma endregion
 
 	m_cube_transform = mat4f::translation(0, 0, 0) *
-		mat4f::rotation(-m_angle_x, 1.0f, 0.0f, 0.0f) * // Rotate around X-axis
-		mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) * // Rotate around Y-axis
+		mat4f::rotation(45, 1.0f, 0.0f, 0.0f) * // Rotate around X-axis
+		//mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) * // Rotate around Y-axis
 		mat4f::scaling(0.5, 0.5, 0.5);
 
 	m_homestead_transform = mat4f::translation(0, -5, -5) *
@@ -130,14 +118,31 @@ void OurTestScene::Update(
 	m_angle_x += m_angular_velocity * dt;
 	m_angle_y += m_angular_velocity * dt;
 
-	// Print fps
+	//Address and Filter Controls
+	if (input_handler.IsKeyPressed(Keys::NUM1))
+		SetSamplerState(m_linear, m_clamp);
+	if (input_handler.IsKeyPressed(Keys::NUM2))
+		SetSamplerState(m_linear, m_mirror);
+	if (input_handler.IsKeyPressed(Keys::NUM3))
+		SetSamplerState(m_linear, m_wrap);
+	if (input_handler.IsKeyPressed(Keys::NUM4))
+		SetSamplerState(m_linear, m_mirror);
+	if (input_handler.IsKeyPressed(Keys::NUM5))
+		SetSamplerState(m_point, m_mirror);
+	if (input_handler.IsKeyPressed(Keys::NUM6))
+		SetSamplerState(m_anisotropic, m_mirror);
+
+
+
+#pragma region Print FPS
 	m_fps_cooldown -= dt;
 	if (m_fps_cooldown < 0.0)
 	{
 		std::cout << "fps " << (int)(1.0f / dt) << std::endl;
-//		printf("fps %i\n", (int)(1.0f / dt));
+		//printf("fps %i\n", (int)(1.0f / dt));
 		m_fps_cooldown = 2.0;
 	}
+#pragma endregion
 }
 
 //
@@ -148,6 +153,7 @@ void OurTestScene::Render()
 	// Bind transformation_buffer to slot b0 of the VS
 	m_dxdevice_context->VSSetConstantBuffers(0, 1, &m_transformation_buffer);
 	m_dxdevice_context->PSSetConstantBuffers(0, 1, &m_lightcam_buffer);
+	m_dxdevice_context->PSSetSamplers(0, 1, &sampler);
 
 	// Obtain the matrices needed for rendering from the camera
 	m_view_matrix = m_camera->WorldToViewMatrix();
@@ -167,8 +173,8 @@ void OurTestScene::Render()
 	/*UpdateTransformationBuffer(m_homestead_transform, m_view_matrix, m_projection_matrix);
 	m_homestead->Render();*/
 
-	//UpdateTransformationBuffer(m_sphere_transform, m_view_matrix, m_projection_matrix);
-	//m_sphere->Render();
+	/*UpdateTransformationBuffer(m_sphere_transform, m_view_matrix, m_projection_matrix);
+	m_sphere->Render();*/
 
 	/*UpdateTransformationBuffer(m_sphere2_transform, m_view_matrix, m_projection_matrix);
 	m_sphere2->Render();*/
@@ -252,7 +258,7 @@ void OurTestScene::UpdateLightCamBuffer(vec4f light_position, vec4f camera_posit
 	m_dxdevice_context->Unmap(m_lightcam_buffer, 0);
 }
 
-void OurTestScene::InitSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE address)
+void OurTestScene::SetSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE address)
 {
 	D3D11_SAMPLER_DESC samplerdesc =
 	{
@@ -261,7 +267,7 @@ void OurTestScene::InitSamplerState(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_M
 		address, // AddressV
 		address, // AddressW
 		0.0f, // MipLODBias
-		1, // MaxAnisotropy
+		16, // MaxAnisotropy
 		D3D11_COMPARISON_NEVER, // ComapirsonFunc
 		{ 1.0f, 1.0f, 1.0f, 1.0f }, // BorderColor
 		-FLT_MAX, // MinLOD
