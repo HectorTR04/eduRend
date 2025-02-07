@@ -30,6 +30,11 @@ OBJModel::OBJModel(
 		indexOffset = (unsigned int)indices.size();
 	}
 
+	for (int i = 0; i < indices.size(); i += 3) 
+		ComputeTB(mesh->Vertices[indices[i + 0]], 
+			mesh->Vertices[indices[i + 1]], 
+			mesh->Vertices[indices[i + 2]]);
+
 	// Vertex array descriptor
 	D3D11_BUFFER_DESC vertexbufferDesc = { 0 };
 	vertexbufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
@@ -80,7 +85,15 @@ OBJModel::OBJModel(
 		}
 
 		// + other texture types here - see Material class
-		// ...
+		if (material.NormalTextureFilename.size()) {
+
+			hr = LoadTextureFromFile(
+				dxdevice,
+				material.NormalTextureFilename.c_str(),
+				&material.NormalTexture);
+			std::cout << "\t" << material.NormalTextureFilename
+				<< (SUCCEEDED(hr) ? " - OK" : "- FAILED") << std::endl;
+		}
 	}
 	std::cout << "Done." << std::endl;
 
@@ -113,6 +126,18 @@ void OBJModel::UpdateMaterialBuffer(Material material) const
 	m_dxdevice_context->Unmap(m_material_buffer, 0);
 }
 
+void OBJModel::ComputeTB(Vertex &v0, Vertex &v1, Vertex &v2)
+{
+	vec3f tangent, binormal;
+
+	// TODO: compute the 'tangent' and 'binormal' vectors
+	//       using Lengyel’s method, as given in lecture
+
+	// Now assign the newly computed vectors to the vertices
+	v0.Tangent = v1.Tangent = v2.Tangent = tangent;
+	v0.Binormal = v1.Binormal = v2.Binormal = binormal;
+}
+
 void OBJModel::Render() const
 {
 	// Bind vertex buffer
@@ -137,6 +162,7 @@ void OBJModel::Render() const
 		// Bind diffuse texture to slot t0 of the PS
 		m_dxdevice_context->PSSetShaderResources(0, 1, &material.DiffuseTexture.TextureView);
 		// + bind other textures here, e.g. a normal map, to appropriate slots
+		m_dxdevice_context->PSSetShaderResources(1, 1, &material.NormalTexture.TextureView);
 
 		// Make the drawcall
 		m_dxdevice_context->DrawIndexed(indexRange.Size, indexRange.Start, 0);
@@ -148,7 +174,7 @@ OBJModel::~OBJModel()
 	for (auto& material : m_materials)
 	{
 		SAFE_RELEASE(material.DiffuseTexture.TextureView);
-
+		SAFE_RELEASE(material.NormalTexture.TextureView);
 		// Release other used textures ...
 	}
 }

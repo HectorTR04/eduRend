@@ -45,6 +45,8 @@ public:
 
 	void UpdateMaterialBuffer(Material material) const;
 
+	void ComputeTB(Vertex &v0, Vertex &v1, Vertex &v2);
+
 	/**
 	 * @brief Renders the model.
 	*/
