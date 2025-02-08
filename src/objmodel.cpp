@@ -157,8 +157,8 @@ void OBJModel::ComputeTB(Vertex &v0, Vertex &v1, Vertex &v2)
 	binormal.z = TB.m23;
 
 	// Now assign the newly computed vectors to the vertices
-	v0.Tangent = v1.Tangent = v2.Tangent = tangent;
-	v0.Binormal = v1.Binormal = v2.Binormal = binormal;
+	v0.Tangent = v1.Tangent = v2.Tangent = normalize(tangent);
+	v0.Binormal = v1.Binormal = v2.Binormal = normalize(binormal);
 }
 
 void OBJModel::Render() const
