@@ -134,14 +134,27 @@ void OBJModel::ComputeTB(Vertex &v0, Vertex &v1, Vertex &v2)
 	vec3f E = v2.Position - v0.Position;
 	vec2f F = v1.TexCoord - v0.TexCoord;
 	vec2f G = v2.TexCoord - v0.TexCoord;
-	
-	mat2f GF = {G.y, -F.y, -G.x, F.x};
+
+	//GF is a 2x2 and DE is a 2x3 matrix both written as 3x3 to allow multiplication
+	mat3f GF = {G.y, -F.y, 0, -G.x, F.x, 0, 0, 0, 0};
 	mat3f DE = {D.x, D.y, D.z, E.x, E.y, E.z, 0, 0, 0};
 	
-	float help = 1 / ((F.x * G.y) - (F.y * G.x));
-	//mat3f TB = help * GF * DE;
-	// TODO: compute the 'tangent' and 'binormal' vectors
-	//       using Lengyel’s method, as given in lecture
+	float determinant = 1 / ((F.x * G.y) - (F.y * G.x));
+	mat3f TB = GF * DE;
+
+	TB.m11 *= determinant;
+	TB.m12 *= determinant;
+	TB.m13 *= determinant;
+	TB.m21 *= determinant;
+	TB.m22 *= determinant;
+	TB.m23 *= determinant;
+
+	tangent.x = TB.m11;
+	tangent.y = TB.m12;
+	tangent.z = TB.m13;
+	binormal.x = TB.m21;
+	binormal.y = TB.m22;
+	binormal.z = TB.m23;
 
 	// Now assign the newly computed vectors to the vertices
 	v0.Tangent = v1.Tangent = v2.Tangent = tangent;

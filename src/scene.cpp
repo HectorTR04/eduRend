@@ -179,7 +179,7 @@ void OurTestScene::Render()
 	/*UpdateTransformationBuffer(m_sphere2_transform, m_view_matrix, m_projection_matrix);
 	m_sphere2->Render();*/
 
-	m_light = {0, 20, 0, 0};
+	m_light = {5, 10, 0, 0};
 
 	UpdateLightCamBuffer(m_light, (m_camera->GetCameraPosition(),0));
 }
