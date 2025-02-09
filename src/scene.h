@@ -94,6 +94,7 @@ class OurTestScene : public Scene
 	Model *m_sphere;
 	Model *m_sphere2;
 	Model *m_homestead;
+	Model *m_skybox;
 
 	mat4f m_sponza_transform;
 	mat4f m_quad_transform;
@@ -102,6 +103,7 @@ class OurTestScene : public Scene
 	mat4f m_sphere2_transform;
 
 	mat4f m_homestead_transform;
+	mat4f m_skybox_transform;
 
 	vec4f m_light;
 

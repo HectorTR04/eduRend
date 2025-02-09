@@ -66,6 +66,16 @@ OBJModel::OBJModel(
 	// Copy materials from mesh
 	append_materials(mesh->Materials);
 
+	const char *cube_filenames[6] =
+	{
+		"assets/cubemaps/brightday/posx.png",
+		"assets/cubemaps/brightday/negx.png",
+		"assets/cubemaps/brightday/posy.png",
+		"assets/cubemaps/brightday/negy.png",
+		"assets/cubemaps/brightday/posz.png",
+		"assets/cubemaps/brightday/negz.png",
+	};
+
 	// Go through materials and load textures (if any) to device
 	std::cout << "Loading textures..." << std::endl;
 	for (auto& material : m_materials)
@@ -95,6 +105,15 @@ OBJModel::OBJModel(
 				<< (SUCCEEDED(hr) ? " - OK" : "- FAILED") << std::endl;
 		}
 	}
+
+	HRESULT hr = LoadCubeTextureFromFile(
+		dxdevice,
+		cube_filenames,
+		&cube_texture);
+
+	if (SUCCEEDED(hr)) std::cout << "Cubemap OK" << std::endl;
+	else std::cout << "Cubemap failed to load" << std::endl;
+
 	std::cout << "Done." << std::endl;
 
 	InitMaterialBuffer();
@@ -157,8 +176,8 @@ void OBJModel::ComputeTB(Vertex &v0, Vertex &v1, Vertex &v2)
 	binormal.z = TB.m23;
 
 	// Now assign the newly computed vectors to the vertices
-	v0.Tangent = v1.Tangent = v2.Tangent = tangent;
-	v0.Binormal = v1.Binormal = v2.Binormal = binormal;
+	v0.Tangent = v1.Tangent = v2.Tangent = normalize(tangent);
+	v0.Binormal = v1.Binormal = v2.Binormal = normalize(binormal);
 }
 
 void OBJModel::Render() const
@@ -186,6 +205,8 @@ void OBJModel::Render() const
 		m_dxdevice_context->PSSetShaderResources(0, 1, &material.DiffuseTexture.TextureView);
 		// + bind other textures here, e.g. a normal map, to appropriate slots
 		m_dxdevice_context->PSSetShaderResources(1, 1, &material.NormalTexture.TextureView);
+
+		m_dxdevice_context->PSSetShaderResources(2, 1, &cube_texture.TextureView);
 
 		// Make the drawcall
 		m_dxdevice_context->DrawIndexed(indexRange.Size, indexRange.Start, 0);

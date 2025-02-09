@@ -1,8 +1,10 @@
 
 Texture2D texDiffuse : register(t0);
 Texture2D texNormal : register(t1);
+TextureCube texCubeMap : register(t2);
 
 SamplerState texSampler : register(s0);
+SamplerState cubeMapSampler : register(s1);
 
 cbuffer LightCamBuffer : register(b0)
 {
@@ -55,14 +57,20 @@ float4 PS_main(PSIn input) : SV_Target
     float3 R = reflect(-L, N);
     float3 V = normalize(camera_position.xyz - input.PosWorld.xyz);
     
+    //float3 refraction = refract(-L, N, 1);
+    
+    float4 cubemap_texture = texCubeMap.Sample(cubeMapSampler, R);
+    float4 skybox_texture = texCubeMap.Sample(cubeMapSampler, R);
+
+    
     float4 lambert_diffuse = max(dot(N, L), 0);
-    float4 specular_highlight = max(pow(abs(dot(R, V)), /*shininess*/1), 0);
+    float4 specular_highlight = max(pow(abs(dot(R, V)), /*shininess*/10), 0);
     
     float4 ambient_component = ambient;
-    float4 diffuse_component = diffuse * lambert_diffuse * diffuse_texture;
+    float4 diffuse_component = diffuse * lambert_diffuse * diffuse_texture * cubemap_texture;
     float4 specular_component = specular * specular_highlight;
     
-    float4 phong_illumination = ambient_component + diffuse_component + specular_component;
+    float4 phong_illumination = /* ambient_component*/+diffuse_component + specular_component;
 
     return float4(phong_illumination.xyz, 1.0);
 
