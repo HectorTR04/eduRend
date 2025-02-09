@@ -102,9 +102,8 @@ void OurTestScene::Update(
 #pragma endregion
 
 	m_cube_transform = mat4f::translation(0, 0, 0) *
-		mat4f::rotation(45, 1.0f, 0.0f, 0.0f) * // Rotate around X-axis
-		//mat4f::rotation(-m_angle_y, 0.0f, 1.0f, 0.0f) * // Rotate around Y-axis
-		mat4f::scaling(0.5, 0.5, 0.5);
+		mat4f::rotation(0, 0.0f, 0.0f, 0.0f) * // Rotate around X-axis
+		mat4f::scaling(50,50,50);
 
 	m_homestead_transform = mat4f::translation(0, -5, -5) *
 		mat4f::scaling(0.1);
@@ -113,6 +112,7 @@ void OurTestScene::Update(
 		mat4f::scaling(5);
 
 	m_sphere2_transform = m_sphere_transform * mat4f::translation(10, 0, 0);
+
 
 	// Increment the rotation angle.
 	m_angle_x += m_angular_velocity * dt;

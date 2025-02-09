@@ -25,8 +25,6 @@ class OBJModel : public Model
 	std::vector<IndexRange> m_index_ranges;
 	std::vector<Material> m_materials;
 
-	Texture cube_texture;
-
 	void append_materials(const std::vector<Material>& mtl_vec)
 	{
 		m_materials.insert(m_materials.end(), mtl_vec.begin(), mtl_vec.end());

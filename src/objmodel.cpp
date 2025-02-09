@@ -104,15 +104,16 @@ OBJModel::OBJModel(
 			std::cout << "\t" << material.NormalTextureFilename
 				<< (SUCCEEDED(hr) ? " - OK" : "- FAILED") << std::endl;
 		}
+
+		hr = LoadCubeTextureFromFile(
+			dxdevice,
+			cube_filenames,
+			&material.CubeMapTexture);
+
+		if (SUCCEEDED(hr)) std::cout << "Cubemap OK" << std::endl;
+		else std::cout << "Cubemap failed to load" << std::endl;
+
 	}
-
-	HRESULT hr = LoadCubeTextureFromFile(
-		dxdevice,
-		cube_filenames,
-		&cube_texture);
-
-	if (SUCCEEDED(hr)) std::cout << "Cubemap OK" << std::endl;
-	else std::cout << "Cubemap failed to load" << std::endl;
 
 	std::cout << "Done." << std::endl;
 
@@ -206,7 +207,7 @@ void OBJModel::Render() const
 		// + bind other textures here, e.g. a normal map, to appropriate slots
 		m_dxdevice_context->PSSetShaderResources(1, 1, &material.NormalTexture.TextureView);
 
-		m_dxdevice_context->PSSetShaderResources(2, 1, &cube_texture.TextureView);
+		m_dxdevice_context->PSSetShaderResources(2, 1, &material.CubeMapTexture.TextureView);
 
 		// Make the drawcall
 		m_dxdevice_context->DrawIndexed(indexRange.Size, indexRange.Start, 0);
