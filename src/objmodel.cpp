@@ -66,16 +66,6 @@ OBJModel::OBJModel(
 	// Copy materials from mesh
 	append_materials(mesh->Materials);
 
-	const char *cube_filenames[6] =
-	{
-		"assets/cubemaps/brightday/posx.png",
-		"assets/cubemaps/brightday/negx.png",
-		"assets/cubemaps/brightday/posy.png",
-		"assets/cubemaps/brightday/negy.png",
-		"assets/cubemaps/brightday/posz.png",
-		"assets/cubemaps/brightday/negz.png",
-	};
-
 	// Go through materials and load textures (if any) to device
 	std::cout << "Loading textures..." << std::endl;
 	for (auto& material : m_materials)
@@ -104,14 +94,6 @@ OBJModel::OBJModel(
 			std::cout << "\t" << material.NormalTextureFilename
 				<< (SUCCEEDED(hr) ? " - OK" : "- FAILED") << std::endl;
 		}
-
-		hr = LoadCubeTextureFromFile(
-			dxdevice,
-			cube_filenames,
-			&material.CubeMapTexture);
-
-		if (SUCCEEDED(hr)) std::cout << "Cubemap OK" << std::endl;
-		else std::cout << "Cubemap failed to load" << std::endl;
 
 	}
 
@@ -206,9 +188,6 @@ void OBJModel::Render() const
 		m_dxdevice_context->PSSetShaderResources(0, 1, &material.DiffuseTexture.TextureView);
 		// + bind other textures here, e.g. a normal map, to appropriate slots
 		m_dxdevice_context->PSSetShaderResources(1, 1, &material.NormalTexture.TextureView);
-
-		m_dxdevice_context->PSSetShaderResources(2, 1, &material.CubeMapTexture.TextureView);
-
 		// Make the drawcall
 		m_dxdevice_context->DrawIndexed(indexRange.Size, indexRange.Start, 0);
 	}
@@ -220,7 +199,6 @@ OBJModel::~OBJModel()
 	{
 		SAFE_RELEASE(material.DiffuseTexture.TextureView);
 		SAFE_RELEASE(material.NormalTexture.TextureView);
-		SAFE_RELEASE(material.CubeMapTexture.TextureView);
 		// Release other used textures ...
 	}
 

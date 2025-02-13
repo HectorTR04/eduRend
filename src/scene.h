@@ -110,6 +110,8 @@ class OurTestScene : public Scene
 	mat4f m_view_matrix;
 	mat4f m_projection_matrix;
 
+	Texture CubeMapTexture;
+
 	// Misc
 	float m_angle_x = 0;			// A per-frame updated rotation angle (radians)...
 	float m_angle_y = 0;

@@ -51,6 +51,24 @@ void OurTestScene::Init()
 	// Move camera to (0,0,5)
 	m_camera->MoveTo({ 0, 0, 5 });
 
+	const char *cube_filenames[6] =
+	{
+		"assets/cubemaps/brightday/posx.png",
+		"assets/cubemaps/brightday/negx.png",
+		"assets/cubemaps/brightday/posy.png",
+		"assets/cubemaps/brightday/negy.png",
+		"assets/cubemaps/brightday/posz.png",
+		"assets/cubemaps/brightday/negz.png",
+	};
+
+	HRESULT hr = LoadCubeTextureFromFile(
+		m_dxdevice,
+		cube_filenames,
+		&CubeMapTexture);
+
+	if (SUCCEEDED(hr)) std::cout << "Cubemap OK" << std::endl;
+	else std::cout << "Cubemap failed to load" << std::endl;
+
 	// Create objects
 	//m_quad = new QuadModel(m_dxdevice, m_dxdevice_context);
 	m_sponza = new OBJModel("assets/crytek-sponza/sponza.obj", m_dxdevice, m_dxdevice_context);
@@ -154,6 +172,7 @@ void OurTestScene::Render()
 	m_dxdevice_context->VSSetConstantBuffers(0, 1, &m_transformation_buffer);
 	m_dxdevice_context->PSSetConstantBuffers(0, 1, &m_lightcam_buffer);
 	m_dxdevice_context->PSSetSamplers(0, 1, &sampler);
+	m_dxdevice_context->PSSetShaderResources(2, 1, &CubeMapTexture.TextureView);
 
 	// Obtain the matrices needed for rendering from the camera
 	m_view_matrix = m_camera->WorldToViewMatrix();

@@ -51,7 +51,6 @@ struct Material
 	Texture DiffuseTexture; //!< Diffuse Texture
 	// + other texture types
 	Texture NormalTexture;
-	Texture CubeMapTexture;
 };
 
 /**
