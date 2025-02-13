@@ -58,8 +58,9 @@ float4 PS_main(PSIn input) : SV_Target
     float3 V = normalize(camera_position.xyz - input.PosWorld.xyz);
     
     //float3 refraction = refract(-L, N, 1);
-    
-    float4 cubemap_texture = texCubeMap.Sample(cubeMapSampler, R);
+    float3 reflectVector = reflect(-V, N);
+     
+    float4 cubemap_texture = texCubeMap.Sample(cubeMapSampler, reflectVector);
     float4 skybox_texture = texCubeMap.Sample(cubeMapSampler, V);
 
     
@@ -67,8 +68,8 @@ float4 PS_main(PSIn input) : SV_Target
     float4 specular_highlight = max(pow(abs(dot(R, V)), /*shininess*/10), 0);
     
     float4 ambient_component = ambient;
-    float4 diffuse_component = diffuse * lambert_diffuse * diffuse_texture;
-    float4 specular_component = specular * specular_highlight;
+    float4 diffuse_component = diffuse * lambert_diffuse * diffuse_texture * cubemap_texture;
+    float4 specular_component = specular * specular_highlight * cubemap_texture;
     
     float4 phong_illumination = /* ambient_component*/+diffuse_component + specular_component;
 

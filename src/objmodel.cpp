@@ -220,6 +220,8 @@ OBJModel::~OBJModel()
 	{
 		SAFE_RELEASE(material.DiffuseTexture.TextureView);
 		SAFE_RELEASE(material.NormalTexture.TextureView);
+		SAFE_RELEASE(material.CubeMapTexture.TextureView);
 		// Release other used textures ...
 	}
+
 }
