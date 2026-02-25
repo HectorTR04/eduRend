@@ -124,8 +124,8 @@ void OurTestScene::Update(
 	m_sphere2_transform = m_sphere_transform * mat4f::translation(10, 0, 0);
 
 	// Increment the rotation angle.
-	m_angle_x += m_angular_velocity * dt;
-	m_angle_y += m_angular_velocity * dt;
+	/*m_angle_x += m_angular_velocity * dt;
+	m_angle_y += m_angular_velocity * dt;*/
 
 	// Print fps
 	m_fps_cooldown -= dt;
@@ -158,14 +158,14 @@ void OurTestScene::Render()
 	/*UpdateTransformationBuffer(m_sponza_transform, m_view_matrix, m_projection_matrix);
 	m_sponza->Render();*/
 
-	/*UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
-	m_cube->Render();*/
+	UpdateTransformationBuffer(m_cube_transform, m_view_matrix, m_projection_matrix);
+	m_cube->Render();
 
-	UpdateTransformationBuffer(m_homestead_transform, m_view_matrix, m_projection_matrix);
+	/*UpdateTransformationBuffer(m_homestead_transform, m_view_matrix, m_projection_matrix);
 	m_homestead->Render();
 
 	UpdateTransformationBuffer(m_sphere_transform, m_view_matrix, m_projection_matrix);
-	m_sphere->Render();
+	m_sphere->Render();*/
 
 	/*UpdateTransformationBuffer(m_sphere2_transform, m_view_matrix, m_projection_matrix);
 	m_sphere2->Render();*/
